@@ -28,10 +28,10 @@
           <td>コメント件数：<%= @book.book_comments.count %></td>
         </tr>
       </table>
-      <table  id="comment_area">
-        <%= render "bookcomments/bookcomment",comment: @comment %>
+      <table  id= "comments_area">
+        <%= render "book_comments/book_comment", book_comments: @book_comments %>
       </table>
-      <%= form_with(model:[@book,@book_comment], local: true) do |f| %>
+      <%= form_with(model:[@book,@book_comment], remote: true) do |f| %>
         <%= f.text_area :comment, size:'90x5',placeholder: "コメントをここに" %>
         <%= f.submit "送信する" %>
       <% end %>
