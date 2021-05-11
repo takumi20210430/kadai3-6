@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :books, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :book_comments, dependent: :destroy
-  
+
   #class Follower
   #フォローする側のuser側からみたRelationshipをactive_relationshipsと命名しておく（なんでも可）親（foreign_key）はフォローする側
   has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
@@ -17,7 +17,7 @@ class User < ApplicationRecord
   #class Followed
   has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
   has_many :followers, through: :passive_relationships, source: :follower
-  
+
   attachment :profile_image, destroy: false
 
   def followed_by?(user)
@@ -25,6 +25,21 @@ class User < ApplicationRecord
     passive_relationships.find_by(follower_id: user.id).present?
   end
 
+  def self.looks(searches, words)
+
+        if searches == "perfect_match"
+            @user = User.where("name LIKE ?", "#{words}")
+
+        elsif searches == "forward_match"
+            @user = User.where("name LIKE ?", "#{words}%")
+
+        elsif searches == "backword_match"
+            @user = User.where("name LIKE ?", "%#{words}")
+
+        else
+            @user = User.where("name LIKE ?", "%#{words}%")
+        end
+  end
   
   #User.find(1).followed_by(2)
 
